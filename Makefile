@@ -5,6 +5,7 @@ LIB = -lpthread
 SRC = \
 		./src/utils.c \
 		./src/main.c \
+		./src/init.c \
 
 OBJ = $(SRC:.c=.o)
 

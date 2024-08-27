@@ -6,76 +6,73 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:10 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/13 16:40:33 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:31:16 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	free_data(t_data *data, int msg)
+void	write_message(t_philo *philo, char *msg)
 {
-	if (msg == 1)
-	{
-		printf("Invalid arguemnts\n");
-		free(data);
-		exit(0);
-		// free forks
-		// free philo
-	}
-	if (msg == 0)
-	{
-		free(data);
-		exit(0);
-	}
+	long long	time;
+
+	time = get_time_in_ms();
+	printf("%d %d %s\n", time - philo->data->start_time, philo->id, msg);
 }
 
-int	check_args(t_data *data)
+int	is_philo_dead(t_philo *philo)
 {
-	if (data->time_philo_must_e && (data->time_philo_must_e < 60 || data->time_philo_must_e > INT_MAX))
+	long long	time;
+
+	time = get_time_in_ms();
+	if (time - philo->data->start_time > philo->data->t2d)
+	{
+		printf("%d %d died\n", time - philo->data->start_time, philo->id);
 		return (1);
-	if (data->n_philo < 1 || data->n_philo > 200 ||
-		data->t2e < 60 || data->t2e > INT_MAX ||
-		data->t2d < 60 || data->t2d > INT_MAX ||
-		data->t2s < 60 || data->t2s > INT_MAX)
-			return (1);
+	}
 	return (0);
 }
 
-int	init_args(char **av, t_data *data)
+int	take_forks(t_philo *philo)
 {
-	data->n_philo = ft_atoi(av[1]);
-	data->t2e = ft_atoi(av[2]);
-	data->t2d = ft_atoi(av[3]);
-	data->t2s = ft_atoi(av[4]);
-	if (av[5])
-		data->time_philo_must_e = ft_atoi(av[5]);
-	return (check_args(data));
+	// si philo pair prend fourchette droite
+	if (philo->id % 2 == 0)
+		pthread_mutex_lock(philo->right_fork);
+	else
+		pthread_mutex_lock(philo->left_fork);
+	if (!is_philo_dead(philo))
+		write_message(philo, "has taken a fork");
+	return 1;
 }
 
-void	init_philo(t_data *data)
+void	*philo_routine(void *args)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)args;
+	// int	i = 0;
+	while (philo->data->is_dead == 0)
+	{
+		// take fork 
+		take_forks(philo);
+		// takes forks
+		// eat
+		// think
+	}
+	return (0);
+}
+
+
+void	start_routine(t_data *data)
 {
 	int	i;
 
-	i = 0;
-	data->philo = malloc(sizeof(t_philo) * data->n_philo);
-	if (!data->philo)
-		free_data(data, 0);
-	// init mutex
-	while (i < data->n_philo)
-	{
-		data->philo[i].id = i;
-		data->philo[i].state = 0;
-		data->philo[i].data = data;
-		i++;
-	}
-}
-
-void	init(t_data *data)
-{
-	init_philo(data);
-	// init threads
-	// join threads
-	// free data
+	i = -1;
+	while (++i < data->n_philo)
+		pthread_create(&data->philo[i].thread, NULL, &philo_routine, &data->philo[i]);
+	i = -1;
+	while (++i < data->n_philo)
+		pthread_join(data->philo[i].thread, NULL);
 }
 
 
@@ -86,5 +83,10 @@ int main(int ac, char **av)
 	data = malloc(sizeof(t_data));
 	if ((ac != 5 && ac != 6) || (init_args(av, data)))
 		free_data(data, 1);
-	init(data);
+	if (!init(data))
+		free_data(data, 0);
+	start_routine(data);
+	// monitoring
+	// join
+	// free_philo
 }
