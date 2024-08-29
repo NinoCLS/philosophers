@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/27 17:05:47 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/08/29 17:33:41 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static int	init_mutex(t_data *data)
+int	init_mutex(t_data *data)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ static int	init_mutex(t_data *data)
 	return (1);
 }
 
-static int	init_philo(t_data *data)
+int	init_philo(t_data *data)
 {
 	int	i;
 
@@ -65,14 +65,9 @@ int	init_args(char **av, t_data *data)
 	data->t2s = ft_atoi(av[4]);
 	if (av[5])
 		data->nb_of_meals = ft_atoi(av[5]);
+	else
+		data->nb_of_meals = 0;
 	data->is_dead = 0;
 	data->start_time = get_time_in_ms();
 	return (check_args(data));
-}
-
-int	init(t_data *data)
-{
-	if (!init_mutex(data) || !init_philo(data))
-		return (0);
-	return (1);
 }

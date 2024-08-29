@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:10:35 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/27 16:18:26 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:32:30 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,16 @@ typedef	struct s_philo
 } t_philo;
 
 
-
-
 // UTILS
 int			ft_atoi(const char *nptr);
 int			free_data(t_data *data, int msg);
-long long	get_time_in_ms();
+int			get_time_in_ms();
+
 
 // INIT
 int			init(t_data *data);
 int			init_args(char **av, t_data *data);
+int			init_philo(t_data *data);
+int			init_mutex(t_data *data);
 
 #endif

@@ -3,20 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:52:26 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/27 17:31:00 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:40:15 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
+void	free_mutex(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->n_philo)
+	{
+		pthread_mutex_destroy(&data->forks_mutex[i]);
+		i++;
+	}
+}
+
 int	free_data(t_data *data, int msg)
 {
 	if (msg == 1)
 	{
-		printf("Invalid arguemnts\n");
+		printf("Invalid arguments\n");
 		free(data);
 		return (0);
 	}
@@ -29,13 +41,13 @@ int	free_data(t_data *data, int msg)
 	return (0);
 }
 
-long long get_time_in_ms()
+int get_time_in_ms()
 {
 	struct timeval time;
+
 	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000) + (time.tv_usec / 1000);
 }
-
 
 int	ft_atoi(const char *nptr)
 {
