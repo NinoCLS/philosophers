@@ -6,7 +6,7 @@
 /*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:10 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/30 14:55:00 by nino             ###   ########.fr       */
+/*   Updated: 2024/08/30 15:47:48 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_philo_dead(t_philo *philo)
 	// }
 	if (philo->data->is_dead == 1)
 	{
-		printf("%lld %d died\n", time - philo->data->start_time, philo->id);
+		printf("%d %d died\n", time - philo->data->start_time, philo->id);
 		return (1);
 	}
 	return (0);
@@ -37,10 +37,10 @@ void	write_message(t_philo *philo, char *msg)
 	int	time;
 
 	time = get_time_in_ms() - philo->data->start_time;
-	pthread_mutex_lock(&philo->data->msg_mutex);
+	pthread_mutex_lock(&philo->data->general_mutex);
 	if (!is_philo_dead(philo))
 		printf("%d %d %s\n", time, philo->id, msg);
-	pthread_mutex_unlock(&philo->data->msg_mutex);
+	pthread_mutex_unlock(&philo->data->general_mutex);
 }
 
 int	lock_forks(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
@@ -81,13 +81,32 @@ int take_forks(t_philo *philo)
 }
 
 
-void	eat(t_philo *philo)
+void	philo_dining(t_philo *philo)
 {
 	write_message(philo, "is eating");
+
+	// Simule le temps que le philosophe passe à manger
 	usleep(philo->data->t2e);
+
+	// Incrémente le compteur de repas s'il existe
+	if (philo->data->nb_of_meals > 0)
+	{
+		philo->meals_eaten++;
+		// Si le philosophe a atteint le nombre maximum de repas
+		if (philo->meals_eaten >= philo->data->nb_of_meals)
+		{
+			// Protection de l'accès partagé avec un mutex
+			pthread_mutex_lock(&philo->data->general_mutex);
+			philo->data->philos_finished_eating++;
+			pthread_mutex_unlock(&philo->data->general_mutex);
+		}
+	}
+
+	// Libère les fourchettes
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
+
 
 
 void	*routine(void *philos)
@@ -100,8 +119,14 @@ void	*routine(void *philos)
 		// take fork 
 		take_forks(philo);
 		// eat
-		eat(philo);
+		philo_dining(philo);
+		if (philo->data->philos_finished_eating && philo->data->philos_finished_eating == philo->data->n_philo)
+		{
+			philo->data->is_dead = 1;
+			break ;
+		}
 		// sleep
+		// philo_sleep(philo);
 		// think
 	}
 	return (0);

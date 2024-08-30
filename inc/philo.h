@@ -6,7 +6,7 @@
 /*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:10:35 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/30 14:32:51 by nino             ###   ########.fr       */
+/*   Updated: 2024/08/30 15:45:01 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ typedef struct s_data
 	int				t2s;
 	int				nb_of_meals;
 	int				is_dead;
-	long long		start_time;
+	int				philos_finished_eating;
+	int				start_time;
 	pthread_mutex_t	*forks_mutex;
-	pthread_mutex_t	msg_mutex;
+	pthread_mutex_t	general_mutex;
 	t_philo			*philo;
 } t_data;
 
@@ -45,6 +46,7 @@ typedef	struct s_philo
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_data			*data;
+	int				meals_eaten;
 } t_philo;
 
 

@@ -6,7 +6,7 @@
 /*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/30 14:07:45 by nino             ###   ########.fr       */
+/*   Updated: 2024/08/30 15:48:16 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	init_mutex(t_data *data)
 		return (0);
 	while (++i < data->n_philo)
 		pthread_mutex_init(&data->forks_mutex[i], NULL);
-	pthread_mutex_init(&data->msg_mutex, NULL);
+	pthread_mutex_init(&data->general_mutex, NULL);
 	return (1);
 }
 
@@ -38,6 +38,7 @@ int	init_philo(t_data *data)
 	{
 		data->philo[i].id = i + 1;
 		data->philo[i].data = data;
+		data->philo[i].meals_eaten = 0;
 		data->philo[i].left_fork = &data->forks_mutex[i];
 		// right fork == next philo 
 		data->philo[i].right_fork = &data->forks_mutex[(i + 1) % data->n_philo];
@@ -70,5 +71,6 @@ int	init_args(char **av, t_data *data)
 		data->nb_of_meals = 0;
 	data->is_dead = 0;
 	data->start_time = get_time_in_ms();
+	data->philos_finished_eating = 0;
 	return (check_args(data));
 }
