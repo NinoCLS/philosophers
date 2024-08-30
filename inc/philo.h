@@ -6,7 +6,7 @@
 /*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:10:35 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/29 19:32:30 by nino             ###   ########.fr       */
+/*   Updated: 2024/08/30 14:32:51 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_data
 	int				is_dead;
 	long long		start_time;
 	pthread_mutex_t	*forks_mutex;
+	pthread_mutex_t	msg_mutex;
 	t_philo			*philo;
 } t_data;
 

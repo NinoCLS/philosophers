@@ -6,7 +6,7 @@
 /*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/29 17:33:41 by nino             ###   ########.fr       */
+/*   Updated: 2024/08/30 14:07:45 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	init_mutex(t_data *data)
 		return (0);
 	while (++i < data->n_philo)
 		pthread_mutex_init(&data->forks_mutex[i], NULL);
+	pthread_mutex_init(&data->msg_mutex, NULL);
 	return (1);
 }
 
