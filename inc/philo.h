@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:10:35 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/30 15:45:01 by nino             ###   ########.fr       */
+/*   Updated: 2024/09/16 17:57:21 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,17 @@ typedef struct s_data
 	int				philos_finished_eating;
 	int				start_time;
 	pthread_mutex_t	*forks_mutex;
-	pthread_mutex_t	general_mutex;
+	pthread_mutex_t	write_mutex;
+	pthread_mutex_t	is_dead_mutex;
+	pthread_mutex_t	finish_eating;
+	pthread_t		monitoring_thread;
 	t_philo			*philo;
 } t_data;
 
 typedef	struct s_philo
 {
 	int				id;
+	int				last_meal;
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;

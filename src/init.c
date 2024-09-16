@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/30 15:48:16 by nino             ###   ########.fr       */
+/*   Updated: 2024/09/16 17:57:20 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ int	init_mutex(t_data *data)
 		return (0);
 	while (++i < data->n_philo)
 		pthread_mutex_init(&data->forks_mutex[i], NULL);
-	pthread_mutex_init(&data->general_mutex, NULL);
+	pthread_mutex_init(&data->write_mutex, NULL);
+	pthread_mutex_init(&data->is_dead_mutex, NULL);
+	pthread_mutex_init(&data->finish_eating, NULL);
 	return (1);
 }
 
@@ -40,7 +42,7 @@ int	init_philo(t_data *data)
 		data->philo[i].data = data;
 		data->philo[i].meals_eaten = 0;
 		data->philo[i].left_fork = &data->forks_mutex[i];
-		// right fork == next philo 
+		// right fork == next philo
 		data->philo[i].right_fork = &data->forks_mutex[(i + 1) % data->n_philo];
 		i++;
 	}
@@ -49,7 +51,7 @@ int	init_philo(t_data *data)
 
 static int	check_args(t_data *data)
 {
-	if (data->nb_of_meals && (data->nb_of_meals < 60 || data->nb_of_meals > INT_MAX))
+	if (data->nb_of_meals < 0)
 		return (1);
 	if (data->n_philo < 1 || data->n_philo > 200 ||
 		data->t2e < 60 || data->t2e > INT_MAX ||
@@ -62,9 +64,9 @@ static int	check_args(t_data *data)
 int	init_args(char **av, t_data *data)
 {
 	data->n_philo = ft_atoi(av[1]);
-	data->t2e = ft_atoi(av[2]);
-	data->t2d = ft_atoi(av[3]);
-	data->t2s = ft_atoi(av[4]);
+	data->t2d = ft_atoi(av[2]) * 1000;
+	data->t2e = ft_atoi(av[3]) * 1000;
+	data->t2s = ft_atoi(av[4]) * 1000;
 	if (av[5])
 		data->nb_of_meals = ft_atoi(av[5]);
 	else
