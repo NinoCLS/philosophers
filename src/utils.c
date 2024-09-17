@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:52:26 by nclassea          #+#    #+#             */
-/*   Updated: 2024/08/29 19:40:15 by nino             ###   ########.fr       */
+/*   Updated: 2024/09/17 15:11:57 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,21 @@ void	free_mutex(t_data *data)
 
 int	free_data(t_data *data, int msg)
 {
+	if (msg == 0)
+	{
+		printf("Malloc Error\n");
+		free(data);
+		return (0);
+	}
 	if (msg == 1)
 	{
 		printf("Invalid arguments\n");
 		free(data);
 		return (0);
 	}
-	if (msg == 0)
+	if (msg == 2)
 	{
-		printf("Malloc Error\n");
+		free(data->philo);
 		free(data);
 		return (0);
 	}

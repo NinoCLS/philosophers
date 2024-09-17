@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:10:35 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/16 17:57:21 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:54:29 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_data
 	pthread_mutex_t	write_mutex;
 	pthread_mutex_t	is_dead_mutex;
 	pthread_mutex_t	finish_eating;
+	pthread_mutex_t	meal_mutex;
 	pthread_t		monitoring_thread;
 	t_philo			*philo;
 } t_data;

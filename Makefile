@@ -25,4 +25,13 @@ fclean: clean
 
 re:	fclean all
 
+valgrind_1death: all
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) 4 310 200 100
+
+valgrind_nodeath: all
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) 5 800 200 200
+
+valgrind_1death_dr: all
+		valgrind --tool=helgrind ./$(NAME) 4 310 200 100
+
 .PHONY: all clean fclean re
