@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nino <nino@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:10 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/17 18:40:55 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/20 18:54:20 by nino             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	is_philo_dead(t_philo *philo)
 void	write_message(t_philo *philo, char *msg)
 {
 	int	current_time;
+
 	if (is_philo_dead(philo))
 		return ;
 	pthread_mutex_lock(&philo->data->write_mutex);
@@ -33,41 +34,89 @@ void	write_message(t_philo *philo, char *msg)
 	pthread_mutex_unlock(&philo->data->write_mutex);
 }
 
-int	lock_forks(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
+void	release_forks(t_philo *philo)
 {
-	pthread_mutex_lock(fork1);
-	if (!is_philo_dead(philo))
-		write_message(philo, "has taken a fork");
-	if (pthread_mutex_lock(fork2) != 0)
-	{
-		pthread_mutex_unlock(fork1);
-		return (1);
-	}
-	if (!is_philo_dead(philo))
-		write_message(philo, "has taken a fork");
-	return (0);
-}
-
-int take_forks(t_philo *philo)
-{
-	int	res_lock;
-
-	// lock les forks en fonction de l'id du philo
 	if (philo->id % 2 == 0)
-		res_lock = lock_forks(philo, philo->right_fork, philo->left_fork);
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+	}
 	else
-		res_lock = lock_forks(philo, philo->left_fork, philo->right_fork);
-	if (res_lock)
-		return 1;
-
-	// check si philo est mort et unlock les forks si c'est le cas
-	if (is_philo_dead(philo))
 	{
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
-		return 1;
 	}
-	return 0;
+}
+
+int	lock_forks(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
+{
+	// pthread_mutex_lock(fork1);
+	// if (!is_philo_dead(philo))
+	// 	write_message(philo, "has taken a fork");
+	// if (pthread_mutex_lock(fork2) != 0)
+	// {
+	// 	pthread_mutex_unlock(fork1);
+	// 	return (1);
+	// }
+	// if (!is_philo_dead(philo))
+	// 	write_message(philo, "has taken a fork");
+
+	pthread_mutex_lock(fork1);
+	if (!is_philo_dead(philo))
+		write_message(philo, "has taken a fork");
+	pthread_mutex_lock(fork2);
+	if (!is_philo_dead(philo))
+		write_message(philo, "has taken a fork");
+	
+	return (0);
+}
+
+
+
+int take_forks(t_philo *philo)
+{
+	// int	res_lock;
+
+	// if (philo->id % 2 == 0)
+	// 	res_lock = lock_forks(philo, philo->right_fork, philo->left_fork);
+	// else
+	// 	res_lock = lock_forks(philo, philo->left_fork, philo->right_fork);
+	// if (res_lock)
+	// 	return (1);
+
+if (philo->id % 2 == 0) {
+    // Philosophes pairs : prennent la fourchette droite en premier
+    pthread_mutex_lock(philo->right_fork);
+    if (!is_philo_dead(philo))
+        write_message(philo, "has taken a fork");
+
+    usleep(100);  // Petit délai pour éviter les conflits
+
+    pthread_mutex_lock(philo->left_fork);
+    if (!is_philo_dead(philo))
+        write_message(philo, "has taken a fork");
+} 
+else 
+{
+    // Philosophes impairs : prennent la fourchette gauche en premier
+    pthread_mutex_lock(philo->left_fork);
+    if (!is_philo_dead(philo))
+        write_message(philo, "has taken a fork");
+
+    usleep(100);  // Petit délai pour éviter les conflits
+
+    pthread_mutex_lock(philo->right_fork);
+    if (!is_philo_dead(philo))
+        write_message(philo, "has taken a fork");
+}
+
+	// check si philo est mort et unlock les forks si c'est le cas
+	if (is_philo_dead(philo)) 
+	{
+		release_forks(philo);
+		return (1);
+	}
+	return (0);
 }
 
 
@@ -77,8 +126,8 @@ int	philo_dining(t_philo *philo)
 	philo->last_meal = get_time_in_ms();
 	pthread_mutex_unlock(&philo->data->meal_mutex);
 	write_message(philo, "is eating");
-	printf("last_meal: %d\n", philo->last_meal);
-	usleep(philo->data->t2e *1000);
+	usleep(philo->data->t2e * 1000);
+	// printf("t2e: %d\n", philo->data->t2e);
 	// peut etre lock et unlock pour mealseaten;
 	if (philo->data->nb_of_meals > 0)
 	{
@@ -101,7 +150,7 @@ void	*routine(void *philos)
 	t_philo *philo;
 
 	philo = (t_philo *)philos;
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 == 1)
 		usleep(100);
 	while (philo->data->is_dead == 0)
 	{
@@ -109,14 +158,11 @@ void	*routine(void *philos)
 			break ;
 		if (philo_dining(philo))
 			break ;
-		// take_forks(philo);
-		// philo_dining(philo);
 		if (philo->data->nb_of_meals > 0 && philo->meals_eaten == philo->data->nb_of_meals)
 			break ;
 		write_message(philo, "is sleeping");
 		usleep(philo->data->t2s * 1000);
 		write_message(philo, "is thinking");
-		// printf("finished eating: %d\n", philo->data->philos_finished_eating);
 	}
 	return (0);
 }
@@ -124,19 +170,21 @@ void	*routine(void *philos)
 int	check_philo_death(t_data *data)
 {
 	int	i;
-	int	current_time;
-
+	int	time_since_last_meal;
+	
 	i = 0;
 	while (i < data->n_philo)
 	{
 		pthread_mutex_lock(&data->is_dead_mutex);
-		current_time = get_time_in_ms() - data->philo[i].last_meal;
-		if (current_time >= data->t2d)
+		time_since_last_meal = get_time_in_ms() - data->philo[i].last_meal;
+		// printf("time since last meal: %d\n", time_since_last_meal);
+		// printf("t2d: %d\n", data->t2d);
+		if (time_since_last_meal >= data->t2d)
 		{
 			data->is_dead = 1;
 			pthread_mutex_unlock(&data->is_dead_mutex);
 			pthread_mutex_lock(&data->write_mutex);
-			printf("%d %d is dead\n", get_time_in_ms() - data->start_time, data->philo[i].id);
+			printf("%d %d died\n", get_time_in_ms() - data->start_time, data->philo[i].id);
 			pthread_mutex_unlock(&data->write_mutex);
 			return (1);
 		}
@@ -168,10 +216,9 @@ void	*monitoring(void *arg)
 	data = (t_data *)arg;
 	while (1)
 	{
-		if (check_philo_death(data))
+		if (check_philo_death(data) || check_philo_meals(data))
 			break ;
-		if (check_philo_meals(data))
-			break ;
+		usleep(1000);
 	}
 	return (0);
 }
