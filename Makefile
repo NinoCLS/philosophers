@@ -34,4 +34,13 @@ valgrind_nodeath: all
 valgrind_1death_dr: all
 		valgrind --tool=helgrind ./$(NAME) 4 310 200 100
 
+valgrind_nodeath_dr: all
+		valgrind --tool=helgrind ./$(NAME) 5 800 200 200
+	
+valgrind_all_ate: all
+		valgrind --tool=helgrind ./$(NAME) 5 800 200 200 7
+
+valgrind_solo_philo: all
+		valgrind --tool=helgrind ./$(NAME) 1 800 200 200
+
 .PHONY: all clean fclean re

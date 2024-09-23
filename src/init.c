@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/17 18:27:10 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/23 16:45:50 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	init_mutex(t_data *data)
 	pthread_mutex_init(&data->is_dead_mutex, NULL);
 	pthread_mutex_init(&data->finish_eating, NULL);
 	pthread_mutex_init(&data->meal_mutex, NULL);
+	pthread_mutex_init(&data->general_mutex, NULL);
 	return (1);
 }
 
