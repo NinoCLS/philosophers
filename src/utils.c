@@ -6,53 +6,31 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:52:26 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/17 15:11:57 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:28:10 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	free_mutex(t_data *data)
+void	ft_sleep(t_philo *philo, int time)
 {
-	int	i;
+	int	start_time;
 
-	i = 0;
-	while (i < data->n_philo)
+	start_time = get_time_in_ms();
+	while ((get_time_in_ms() - start_time) < time)
 	{
-		pthread_mutex_destroy(&data->forks_mutex[i]);
-		i++;
+		usleep(1000);
+		if (is_philo_dead(philo))
+			return ;
 	}
 }
 
-int	free_data(t_data *data, int msg)
+int	get_time_in_ms(void)
 {
-	if (msg == 0)
-	{
-		printf("Malloc Error\n");
-		free(data);
-		return (0);
-	}
-	if (msg == 1)
-	{
-		printf("Invalid arguments\n");
-		free(data);
-		return (0);
-	}
-	if (msg == 2)
-	{
-		free(data->philo);
-		free(data);
-		return (0);
-	}
-	return (0);
-}
-
-int get_time_in_ms()
-{
-	struct timeval time;
+	struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 int	ft_atoi(const char *nptr)

@@ -5,25 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 14:10:35 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/23 14:40:22 by nclassea         ###   ########.fr       */
+/*   Created: 2024/09/24 17:28:53 by nclassea          #+#    #+#             */
+/*   Updated: 2024/09/24 17:31:17 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
-#define PHILO_H
-
+# define PHILO_H
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
 
-#define INT_MAX 2147483647
-#define SIZE_MAX (18446744073709551615UL)
+# define INT_MAX 2147483647
+# define SIZE_MAX (18446744073709551615UL)
 
-typedef	struct s_philo t_philo;
-
+typedef struct s_philo	t_philo;
 typedef struct s_data
 {
 	int				n_philo;
@@ -42,9 +40,9 @@ typedef struct s_data
 	pthread_mutex_t	general_mutex;
 	pthread_t		monitoring_thread;
 	t_philo			*philo;
-} t_data;
+}	t_data;
 
-typedef	struct s_philo
+typedef struct s_philo
 {
 	int				id;
 	int				last_meal;
@@ -53,19 +51,33 @@ typedef	struct s_philo
 	pthread_mutex_t	*right_fork;
 	t_data			*data;
 	int				meals_eaten;
-} t_philo;
+}	t_philo;
 
+// PHILO_ACTIONS
+int			philo_dining(t_philo *philo);
+int			take_forks(t_philo *philo);
+void		write_message(t_philo *philo, char *msg);
 
 // UTILS
 int			ft_atoi(const char *nptr);
-int			free_data(t_data *data, int msg);
-int			get_time_in_ms();
+int			get_time_in_ms(void);
+void		ft_sleep(t_philo *philo, int time);
 
+// FREE
+void		destroy_mutex(t_data *data);
+int			free_data(t_data *data, int msg);
 
 // INIT
 int			init(t_data *data);
 int			init_args(char **av, t_data *data);
 int			init_philo(t_data *data);
 int			init_mutex(t_data *data);
+
+// MOINTORING
+void		*monitoring(void *arg);
+
+// ROUTINE
+void		create_routine(t_data *data);
+int			is_philo_dead(t_philo *philo);
 
 #endif

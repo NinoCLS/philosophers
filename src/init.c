@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/23 16:45:50 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:15:43 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	init_philo(t_data *data)
 		data->philo[i].meals_eaten = 0;
 		data->philo[i].last_meal = get_time_in_ms();
 		data->philo[i].left_fork = &data->forks_mutex[i];
-		// right fork => next philo
 		data->philo[i].right_fork = &data->forks_mutex[(i + 1) % data->n_philo];
 		i++;
 	}
@@ -56,11 +55,11 @@ static int	check_args(t_data *data)
 {
 	if (data->nb_of_meals < 0)
 		return (1);
-	if (data->n_philo < 1 || data->n_philo > 200 ||
-		data->t2e < 60 || data->t2e > INT_MAX ||
-		data->t2d < 60 || data->t2d > INT_MAX ||
-		data->t2s < 60 || data->t2s > INT_MAX)
-			return (1);
+	if (data->n_philo < 1 || data->n_philo > 200
+		|| data->t2e < 60 || data->t2e > INT_MAX
+		|| data->t2d < 60 || data->t2d > INT_MAX
+		|| data->t2s < 60 || data->t2s > INT_MAX)
+		return (1);
 	return (0);
 }
 
