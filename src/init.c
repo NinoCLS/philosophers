@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/24 17:15:43 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:59:04 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,51 @@ int	init_philo(t_data *data)
 	return (1);
 }
 
-static int	check_args(t_data *data)
+int	is_char_in(char *str, int *i)
 {
-	if (data->nb_of_meals < 0)
+	while (str[*i++])
+	{
+		if (str[*i] < '0' || str[*i] > '9')
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+int	check_limits(char *str)
+{
+	int	len;
+	int	i;
+
+	i = 0;
+	len = ft_strlen(str);
+	if (str[0] == '+')
+	{
+		str++;
+		len--;
+	}
+	if (is_char_in(str, &i))
 		return (1);
-	if (data->n_philo < 1 || data->n_philo > 200
-		|| data->t2e < 60 || data->t2e > INT_MAX
-		|| data->t2d < 60 || data->t2d > INT_MAX
-		|| data->t2s < 60 || data->t2s > INT_MAX)
+	if (len < LEN_MAX_INT)
+		return (0);
+	i = 0;
+	if (len == LEN_MAX_INT)
+	{
+		while (str[i] - "2147483647"[i] <= 0 && str[i])
+			i++;
+	}
+	if (len > LEN_MAX_INT || str[i])
 		return (1);
 	return (0);
 }
 
 int	init_args(char **av, t_data *data)
 {
+	if (check_limits(av[1]) || check_limits(av[2])
+		|| check_limits(av[3]) || check_limits(av[4]))
+		return (0);
+	if (av[5] && check_limits(av[5]))
+		return (0);
 	data->n_philo = ft_atoi(av[1]);
 	data->t2d = ft_atoi(av[2]);
 	data->t2e = ft_atoi(av[3]);
@@ -75,5 +106,5 @@ int	init_args(char **av, t_data *data)
 		data->nb_of_meals = 0;
 	data->is_dead = 0;
 	data->philos_finished_eating = 0;
-	return (check_args(data));
+	return (1);
 }

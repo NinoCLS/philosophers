@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:52:26 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/24 17:28:10 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:57:09 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,14 @@ int	ft_atoi(const char *nptr)
 	if (sign == 1)
 		out *= -1;
 	return (out);
+}
+
+int	ft_strlen(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[i])
+		i++;
+	return (i);
 }

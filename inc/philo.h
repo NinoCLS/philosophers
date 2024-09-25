@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:28:53 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/24 17:31:17 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:39:52 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 
-# define INT_MAX 2147483647
+# define LEN_MAX_INT 10
 # define SIZE_MAX (18446744073709551615UL)
 
 typedef struct s_philo	t_philo;
@@ -62,6 +62,7 @@ void		write_message(t_philo *philo, char *msg);
 int			ft_atoi(const char *nptr);
 int			get_time_in_ms(void);
 void		ft_sleep(t_philo *philo, int time);
+int			ft_strlen(char *s);
 
 // FREE
 void		destroy_mutex(t_data *data);
