@@ -7,6 +7,7 @@ SRC = \
 		./src/free.c \
 		./src/init.c \
 		./src/monitoring.c \
+		./src/parsing.c \
 		./src/philo_actions.c \
 		./src/routine.c \
 		./src/utils.c \

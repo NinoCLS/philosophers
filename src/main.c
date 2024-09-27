@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:10 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/25 16:21:17 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/25 18:09:35 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	main(int ac, char **av)
 	data = malloc(sizeof(t_data));
 	if ((ac != 5 && ac != 6) || (!init_args(av, data)))
 		return (free_data(data, 1));
-	printf("TEST\n");
 	if (!init_mutex(data) || !init_philo(data))
 		return (free_data(data, 0));
 	create_routine(data);

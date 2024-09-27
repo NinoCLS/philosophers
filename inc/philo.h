@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:28:53 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/25 16:39:52 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:03:25 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,9 @@ void		*monitoring(void *arg);
 // ROUTINE
 void		create_routine(t_data *data);
 int			is_philo_dead(t_philo *philo);
+
+// PARSING
+int			check_limits(char *str);
+int			check_limits2(t_data *data);
 
 #endif

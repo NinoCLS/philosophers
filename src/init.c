@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:58:36 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/25 16:59:04 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:07:20 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,44 +51,6 @@ int	init_philo(t_data *data)
 	return (1);
 }
 
-int	is_char_in(char *str, int *i)
-{
-	while (str[*i++])
-	{
-		if (str[*i] < '0' || str[*i] > '9')
-			return (1);
-		str++;
-	}
-	return (0);
-}
-
-int	check_limits(char *str)
-{
-	int	len;
-	int	i;
-
-	i = 0;
-	len = ft_strlen(str);
-	if (str[0] == '+')
-	{
-		str++;
-		len--;
-	}
-	if (is_char_in(str, &i))
-		return (1);
-	if (len < LEN_MAX_INT)
-		return (0);
-	i = 0;
-	if (len == LEN_MAX_INT)
-	{
-		while (str[i] - "2147483647"[i] <= 0 && str[i])
-			i++;
-	}
-	if (len > LEN_MAX_INT || str[i])
-		return (1);
-	return (0);
-}
-
 int	init_args(char **av, t_data *data)
 {
 	if (check_limits(av[1]) || check_limits(av[2])
@@ -104,6 +66,8 @@ int	init_args(char **av, t_data *data)
 		data->nb_of_meals = ft_atoi(av[5]);
 	else
 		data->nb_of_meals = 0;
+	if (check_limits2(data))
+		return (0);
 	data->is_dead = 0;
 	data->philos_finished_eating = 0;
 	return (1);
