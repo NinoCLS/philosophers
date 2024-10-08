@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:28:53 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/27 15:03:25 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:16:11 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int			init_args(char **av, t_data *data);
 int			init_philo(t_data *data);
 int			init_mutex(t_data *data);
 
-// MOINTORING
+// MONITORING
 void		*monitoring(void *arg);
 
 // ROUTINE

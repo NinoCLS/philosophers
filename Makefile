@@ -14,19 +14,19 @@ SRC = \
 
 OBJ = $(SRC:.c=.o)
 
-.c.o:
-	@$(CC) $(CFLAGS) $< -o $@
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(LIBFT) $(SRC)
-		$(CC) $(SRC) $(CFLAGS) $(LIB) -o $(NAME)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) $(CFLAGS) $(LIB) -o $(NAME)
 
 all: $(NAME)
 
 clean:
-		@rm -rf $(OBJ)
+	@rm -rf $(OBJ)
 
 fclean: clean
-		@rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 re:	fclean all
 

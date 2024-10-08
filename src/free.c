@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 16:54:49 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/24 17:17:40 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/10/08 13:52:22 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	destroy_mutex(t_data *data)
 	pthread_mutex_destroy(&data->write_mutex);
 	pthread_mutex_destroy(&data->is_dead_mutex);
 	pthread_mutex_destroy(&data->finish_eating);
+	pthread_mutex_destroy(&data->meal_mutex);
+	pthread_mutex_destroy(&data->general_mutex);
 	free(data->forks_mutex);
 }
 

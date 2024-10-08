@@ -6,7 +6,7 @@
 /*   By: nclassea <nclassea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 16:56:47 by nclassea          #+#    #+#             */
-/*   Updated: 2024/09/24 17:20:39 by nclassea         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:08:53 by nclassea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static int	check_philo_death(t_data *data)
 	while (i < data->n_philo)
 	{
 		pthread_mutex_lock(&data->is_dead_mutex);
+		pthread_mutex_lock(&data->meal_mutex);
 		time_since_last_meal = get_time_in_ms() - data->philo[i].last_meal;
+		pthread_mutex_unlock(&data->meal_mutex);
 		if (time_since_last_meal > data->t2d)
 		{
 			data->is_dead = 1;
